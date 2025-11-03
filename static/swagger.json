@@ -1,0 +1,154 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Board Game Graph API",
+    "description": "API for board game recommendations using graph database",
+    "version": "1.0",
+    "contact": {
+      "name": "Board Game API"
+    }
+  },
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Home endpoint",
+        "description": "Returns API information and available endpoints",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {"type": "string"},
+                "endpoints": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/init": {
+      "post": {
+        "summary": "Load sample data",
+        "description": "Initialize the graph database with sample board game data including games, mechanics, and designers",
+        "responses": {
+          "200": {
+            "description": "Data loaded successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {"type": "string"},
+                "games_added": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error loading data",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {"type": "string"},
+                "details": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recommend/{game}": {
+      "get": {
+        "summary": "Get recommended games",
+        "description": "Find similar games based on shared mechanics or designers",
+        "parameters": [
+          {
+            "name": "game",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Name of the game to get recommendations for (e.g., Catan, Wingspan)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "game": {"type": "string"},
+                "recommendations": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "count": {"type": "integer"}
+              }
+            }
+          },
+          "500": {
+            "description": "Error getting recommendations",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {"type": "string"},
+                "details": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/details/{game}": {
+      "get": {
+        "summary": "Get details for a specific game",
+        "description": "Retrieve all properties and information for a specific board game",
+        "parameters": [
+          {
+            "name": "game",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Name of the game to get details for (e.g., Catan, Wingspan)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "game": {"type": "string"},
+                "details": {"type": "array"}
+              }
+            }
+          },
+          "404": {
+            "description": "Game not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {"type": "string"},
+                "game": {"type": "string"}
+              }
+            }
+          },
+          "500": {
+            "description": "Error getting game details",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {"type": "string"},
+                "details": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
