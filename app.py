@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def home():
+    """Home endpoint"""
     return jsonify({
         "message": "Welcome to Board Game Recommendation API",
         "endpoints": {
@@ -18,6 +19,7 @@ def home():
 
 @app.route('/init', methods=['POST'])
 def init_data():
+    """Initialize the graph database with sample board game data"""
     try:
         add_sample_data()
         return jsonify({
@@ -32,6 +34,7 @@ def init_data():
 
 @app.route('/recommend/<game>', methods=['GET'])
 def recommend(game):
+    """Get recommendations for similar games"""
     try:
         results = get_similar_games(game)
         return jsonify({
@@ -47,6 +50,7 @@ def recommend(game):
 
 @app.route('/details/<game>', methods=['GET'])
 def details(game):
+    """Get detailed information about a specific game"""
     try:
         game_details = get_game_details(game)
         if not game_details:
@@ -74,7 +78,7 @@ app.register_blueprint(swagger_bp, url_prefix=SWAGGER_URL)
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("🎲 Board Game Recommendation API Server")
+    print("Board Game Recommendation API Server")
     print("=" * 60)
     print("Server starting on http://127.0.0.1:5000")
     print("")
@@ -85,6 +89,6 @@ if __name__ == "__main__":
     print("  - GET  /details/<game>   : Get game details")
     print("  - GET  /swagger       : API documentation")
     print("")
-    print("⚠️  Make sure Gremlin Server is running on ws://localhost:8182")
+    print("Make sure Gremlin Server is running on ws://localhost:8182")
     print("=" * 60)
     app.run(debug=True, host='0.0.0.0', port=5000)
